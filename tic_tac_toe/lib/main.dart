@@ -9,21 +9,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tic-Tac-Toe',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.red,
       ),
       home: const MyHomePage(title: 'Tic-Tac-Toe'),
@@ -33,15 +23,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -74,10 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
       buttons.add(
         ElevatedButton(
           onPressed: () {
-            print("You pressed button number $k");
+            // print("You pressed button number $k");
+            setState(() {
+              game.pressedSquare(k);
+            });
+            // print("new state == $game");
           },
           child: Text(
-            "X",
+            (game.board[k] == TicTacToeMark.x)
+                ? "X"
+                : ((game.board[k] == TicTacToeMark.o) ? "O" : " "),
             style: TextStyle(fontSize: 90.0),
           ),
         ),
@@ -89,25 +76,54 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.red[800],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              gameStateString,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Expanded(
-              child: GridView.count(
-                primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 3,
-                children: buttons,
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 500.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                gameStateString,
+                style: Theme.of(context).textTheme.headline4,
               ),
-            )
-          ],
+              Flexible(
+                fit: FlexFit.tight,
+                flex: 4,
+                child: GridView.count(
+                  // childAspectRatio: 2 / 3,
+
+                  primary: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 3,
+                  children: buttons,
+                ),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // print("You pressed new game");
+                        setState(() {
+                          game = TicTacToeGame();
+                        });
+                      },
+                      child: const Text(
+                        "New Game",
+                        style: TextStyle(fontSize: 30.0),
+                      ),
+                    ),
+                    const SizedBox(width: 20.0),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
