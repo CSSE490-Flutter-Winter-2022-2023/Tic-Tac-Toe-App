@@ -62,13 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           child: Image.asset(
-              (game.board[k] == TicTacToeMark.x)
-                  ? "assets/images/x.png"
-                  : ((game.board[k] == TicTacToeMark.o)
-                      ? "assets/images/o.png"
-                      : "assets/images/blank.png"),
-              // style: TextStyle(fontSize: 90.0),
-              fit: BoxFit.fill),
+            (game.board[k] == TicTacToeMark.x)
+                ? "assets/images/x.png"
+                : ((game.board[k] == TicTacToeMark.o)
+                    ? "assets/images/o.png"
+                    : "assets/images/blank.png"),
+            // style: TextStyle(fontSize: 90.0),
+          ),
         ),
       );
     }
@@ -82,11 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           aspectRatio: 2 / 3,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const SizedBox(
-                height: 30.0,
-              ),
               Text(
                 gameStateString,
                 style: Theme.of(context).textTheme.headline2,
@@ -98,39 +94,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Container(
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("assets/images/board.png"),
-                          fit: BoxFit.fill),
-                    ),
-                    child: Expanded(
-                      child: GridView.count(
-                        primary: false,
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisSpacing: 20.0,
-                        mainAxisSpacing: 20.0,
-                        crossAxisCount: 3,
-                        children: buttons,
+                        image: AssetImage("assets/images/board.png"),
                       ),
+                    ),
+                    child: GridView.count(
+                      primary: false,
+                      crossAxisSpacing: 20.0,
+                      mainAxisSpacing: 20.0,
+                      crossAxisCount: 3,
+                      children: buttons,
                     ),
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        game = TicTacToeGame();
-                      });
-                    },
-                    child: const Text(
-                      "New Game",
-                      style: TextStyle(fontSize: 30.0),
-                    ),
-                  ),
-                ],
-              )
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    game = TicTacToeGame();
+                  });
+                },
+                child: const Text(
+                  "New Game",
+                  style: TextStyle(fontSize: 30.0),
+                ),
+              ),
             ],
           ),
         ),
