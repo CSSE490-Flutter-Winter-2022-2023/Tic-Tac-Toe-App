@@ -15,15 +15,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tic-Tac-Toe',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.red,
       ),
       home: const MyHomePage(title: 'Tic-Tac-Toe'),
@@ -33,15 +24,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -69,17 +51,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = <ElevatedButton>[];
+    final buttons = <Widget>[];
     for (var k = 0; k < 9; k++) {
       buttons.add(
-        ElevatedButton(
-          onPressed: () {
-            print("You pressed button number $k");
+        InkWell(
+          onTap: () {
+            // print("You pressed button number $k");
+            setState(() {
+              game.pressedSquare(k);
+            });
           },
-          child: Text(
-            "X",
-            style: TextStyle(fontSize: 90.0),
-          ),
+          child: Image.asset(
+              (game.board[k] == TicTacToeMark.x)
+                  ? "assets/images/x.png"
+                  : ((game.board[k] == TicTacToeMark.o)
+                      ? "assets/images/o.png"
+                      : "assets/images/blank.png"),
+              // style: TextStyle(fontSize: 90.0),
+              fit: BoxFit.fill),
         ),
       );
     }
@@ -89,27 +78,63 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.red[800],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              gameStateString,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Expanded(
-              child: GridView.count(
-                primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 3,
-                children: buttons,
+        child: AspectRatio(
+          aspectRatio: 2 / 3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const SizedBox(
+                height: 30.0,
               ),
-            )
-          ],
+              Text(
+                gameStateString,
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              AspectRatio(
+                aspectRatio: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/board.png"),
+                          fit: BoxFit.fill),
+                    ),
+                    child: Expanded(
+                      child: GridView.count(
+                        primary: false,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisSpacing: 20.0,
+                        mainAxisSpacing: 20.0,
+                        crossAxisCount: 3,
+                        children: buttons,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        game = TicTacToeGame();
+                      });
+                    },
+                    child: const Text(
+                      "New Game",
+                      style: TextStyle(fontSize: 30.0),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
