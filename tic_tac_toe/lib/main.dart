@@ -50,25 +50,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = <ElevatedButton>[];
+    final buttons = <Widget>[];
     for (var k = 0; k < 9; k++) {
-      buttons.add(
-        ElevatedButton(
-          onPressed: () {
-            // print("You pressed button number $k");
-            setState(() {
-              game.pressedSquare(k);
-            });
-            // print("new state == $game");
-          },
-          child: Text(
-            (game.board[k] == TicTacToeMark.x)
-                ? "X"
-                : ((game.board[k] == TicTacToeMark.o) ? "O" : " "),
-            style: TextStyle(fontSize: 90.0),
-          ),
-        ),
-      );
+      buttons.add(InkWell(
+        onTap: () {
+          print("You clicked $k");
+        },
+        child: Image.asset("assets/images/x.png"),
+      ));
+
+      // ElevatedButton(
+      //   onPressed: () {
+      //     // print("You pressed button number $k");
+      //     setState(() {
+      //       game.pressedSquare(k);
+      //     });
+      //     // print("new state == $game");
+      //   },
+      //   // child: Text(
+      //   //   (game.board[k] == TicTacToeMark.x)
+      //   //       ? "X"
+      //   //       : ((game.board[k] == TicTacToeMark.o) ? "O" : " "),
+      //   //   style: TextStyle(fontSize: 90.0),
+      //   // ),
+
+      //   child: Image.asset("assets/images/x.png"),
+      // ),
+      // );
     }
     return Scaffold(
       appBar: AppBar(
