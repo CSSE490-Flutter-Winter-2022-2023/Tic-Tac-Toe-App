@@ -52,11 +52,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final buttons = <Widget>[];
     for (var k = 0; k < 9; k++) {
+      var filename = "blank.png";
+      if (game.board[k] == TicTacToeMark.x) {
+        filename = "x.png";
+      } else if (game.board[k] == TicTacToeMark.o) {
+        filename = "o.png";
+      }
       buttons.add(InkWell(
         onTap: () {
-          print("You clicked $k");
+          setState(() {
+            game.pressedSquare(k);
+          });
         },
-        child: Image.asset("assets/images/x.png"),
+        child: Image.asset("assets/images/$filename"),
       ));
 
       // ElevatedButton(
@@ -91,21 +99,28 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               Text(
                 gameStateString,
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              const SizedBox(
+                height: 15.0,
               ),
               Flexible(
                 fit: FlexFit.tight,
                 flex: 4,
-                child: GridView.count(
-                  // childAspectRatio: 2 / 3,
-
-                  primary: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 3,
-                  children: buttons,
+                child: Stack(
+                  // fit: StackFit.expand,
+                  children: [
+                    Image.asset("assets/images/board.png"),
+                    GridView.count(
+                      primary: false,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 30,
+                      mainAxisSpacing: 30,
+                      crossAxisCount: 3,
+                      children: buttons,
+                    ),
+                  ],
                 ),
               ),
               Flexible(
